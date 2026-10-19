@@ -43,7 +43,7 @@ jobs:
     steps:
       - uses: actions/checkout@v6
         with:
-          repository: traccar/traccar-web
+          repository: Blue-Track/bluetrack-web
           ref: ${{ github.ref_name }}
       - uses: actions/setup-node@v6
         with:
