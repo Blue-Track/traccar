@@ -982,6 +982,14 @@ public final class Keys {
             List.of(KeyType.CONFIG));
 
     /**
+     * Include stack traces in API error responses. Disable to return only error messages.
+     */
+    public static final ConfigKey<Boolean> WEB_SHOW_STACK_TRACES = new BooleanConfigKey(
+            "web.showStackTraces",
+            List.of(KeyType.CONFIG),
+            true);
+
+    /**
      * A token to log in as a virtual admin account. Can be used to restore access in case of issues with regular
      * admin login. For example, if a password is lost and can't be restored.
      */
@@ -1101,6 +1109,7 @@ public final class Keys {
 
     /**
      * Additional HTTP header that can be used for authorization.
+     * Global headers are only used when forwarding to the globally configured URL.
      */
     public static final ConfigKey<String> FORWARD_HEADER = new StringConfigKey(
             "forward.header",
@@ -1392,6 +1401,14 @@ public final class Keys {
             List.of(KeyType.CONFIG));
 
     /**
+     * Enable Google Find Hub command sender.
+     */
+    public static final ConfigKey<Boolean> COMMAND_FIND_HUB_ENABLE = new BooleanConfigKey(
+            "command.findHub.enable",
+            List.of(KeyType.CONFIG),
+            false);
+
+    /**
      * Google Find Hub service URL.
      */
     public static final ConfigKey<String> COMMAND_FIND_HUB_URL = new StringConfigKey(
@@ -1487,6 +1504,13 @@ public final class Keys {
      */
     public static final ConfigKey<String> NOTIFICATOR_TELEGRAM_PROXY_URL = new StringConfigKey(
             "notificator.telegram.proxy.url",
+            List.of(KeyType.CONFIG));
+
+    /**
+     * Telegram notification base URL.
+     */
+    public static final ConfigKey<String> NOTIFICATOR_TELEGRAM_BASE_URL = new StringConfigKey(
+            "notificator.telegram.base.url",
             List.of(KeyType.CONFIG));
 
     /**
