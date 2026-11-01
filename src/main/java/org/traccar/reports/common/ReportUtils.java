@@ -16,8 +16,6 @@
  */
 package org.traccar.reports.common;
 
-import jakarta.annotation.Nullable;
-import jakarta.inject.Inject;
 import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.tools.generic.DateTool;
 import org.apache.velocity.tools.generic.NumberTool;
@@ -57,6 +55,8 @@ import org.traccar.storage.query.Condition;
 import org.traccar.storage.query.Order;
 import org.traccar.storage.query.Request;
 
+import jakarta.annotation.Nullable;
+import jakarta.inject.Inject;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -207,6 +207,8 @@ public class ReportUtils {
         trip.setDeviceId(deviceId);
         trip.setDeviceName(device.getName());
 
+        trip.setBusiness(startTrip.getBoolean(Position.KEY_BUSINESS));
+
         trip.setStartPositionId(startTrip.getId());
         trip.setStartLat(startTrip.getLatitude());
         trip.setStartLon(startTrip.getLongitude());
@@ -347,7 +349,9 @@ public class ReportUtils {
                 for (var iterator = stream.iterator(); iterator.hasNext();) {
                     Position position = iterator.next();
                     if (lastPosition == null) {
-                        boolean initialValue = position.getBoolean(Position.KEY_MOTION);
+                        boolean initialValue = position.getBoolean(
+                                tripsConfig.getUseIgnition() && position.hasAttribute(Position.KEY_IGNITION)
+                                        ? Position.KEY_IGNITION : Position.KEY_MOTION);
                         if (initialValue == trips) {
                             startPosition = position;
                             maxSpeed = position.getSpeed();
@@ -357,7 +361,8 @@ public class ReportUtils {
                     }
                     maxSpeed = Math.max(maxSpeed, position.getSpeed());
                     positionMap.put(position.getId(), position);
-                    NewMotionProcessor.updateState(motionState, position, minDistance, minDuration, stopGap);
+                    NewMotionProcessor.updateState(
+                            motionState, position, minDistance, minDuration, stopGap, tripsConfig.getUseIgnition());
                     if (!motionState.getEvents().isEmpty()) {
                         for (Event event : motionState.getEvents()) {
                             event.set("maxSpeed", maxSpeed);

@@ -1,6 +1,5 @@
 package org.traccar.protocol;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.traccar.ProtocolTest;
 import org.traccar.model.Position;
@@ -222,6 +221,16 @@ public class TeltonikaProtocolDecoderTest extends ProtocolTest {
                 "00000000000000968e010000019b76daa800000000000000000000000000000000000000001b000b00150500450000716400c80300ed0200ef0000f000012f00017f0333d20833d30a000a0011ffd30012ffe70013002300430fd400440000004600ee00b5000000b6000000ce000001820000000600100000000000c70000000000cd0000000000f100000000032000003249047c00000000000000000100003e0b"),
                 position().attribute(Position.KEY_BATTERY_LEVEL, 100));
 
+        decoder.setModelOverride("ATC700");
+
+        verifyDecode(decoder, binary(
+                "00000000000000528e01000001a11df939f8010898823c1ddabd9a00fc00260800000000000b000500150300450000715f00f000064000000500430f9200440000004600f800b503e800b603e8000103200000000000000000010000418f"),
+                position().attribute(Position.KEY_BATTERY_LEVEL, 95));
+
+        verifyDecode(decoder, binary(
+                "00000000000000528e01000001a11df939f8010898823c1ddabd9a00fc00260800000000000b000500150300450000715f00f000064000000500430f9200440000004600f800b503e800b603e8000103200000000000000000010000418f"),
+                position().attribute(Position.KEY_DEVICE_TEMP, 24.8));
+
     }
 
     @Test
@@ -243,11 +252,12 @@ public class TeltonikaProtocolDecoderTest extends ProtocolTest {
 
     }
 
-    @Disabled
     @Test
     public void testDecodeConnectionless() throws Exception {
 
         var decoder = inject(new TeltonikaProtocolDecoder(null, true));
+
+        verifyDecode(decoder, binary("ff"));
 
         verifyDecode(decoder, binary(
                 "0049cafe0122000f33353734353430373237313339373508010000015d3766f6a800003eef961ec6215e0063006d09003100070401000200f001c8000242381c18003201c7000000e10001"),
